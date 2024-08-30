@@ -1,5 +1,4 @@
 /*
-	initialize 2d array elements with "" 
 	checkwinner
 	alternating X or O function
 
@@ -69,7 +68,30 @@ void analyzeClick(sf::Vector2i clickPos, int sideLen, std::string (&arr)[3][3]) 
 	}
 } 
 
-void checkWinner(int(&arr)[3][3]) {
+bool checkLine(std::string a, std::string b, std::string c, std::string player) {
+	return a == player && b == player && c == player; 
+}
+
+void checkWinner(std::string(&arr)[3][3]) {
+	std::string players[2] = { "X", "O" };
+
+	for (const std::string player : players) {
+		for (int i = 0; i < 3; i++) {
+			if (checkLine(arr[i][0], arr[i][1], arr[i][2], player) ||
+				checkLine(arr[0][i], arr[1][i], arr[2][i], player)) {
+			}
+			std::cout << player << " wins" << std::endl;
+			return;
+		}
+
+		if (checkLine(arr[0][0], arr[1][1], arr[2][2], player) ||
+			checkLine(arr[0][2], arr[1][1], arr[2][0], player)) {
+			std::cout << player << " wins" << std::endl; 
+			return; 
+		}
+	}
+
+
 	// more efficient checkwinner func
 }
 
@@ -77,6 +99,12 @@ void checkWinner(int(&arr)[3][3]) {
 int main() {
 	int sideLen = 700; 
 	std::string arr[3][3]; 
+
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			arr[i][j] = ""; 
+		}
+	}
 
 
 	sf::RenderWindow window(sf::VideoMode(sideLen, sideLen), "Tic-tac-toe");
