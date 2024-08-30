@@ -1,12 +1,10 @@
 /*
-	pair class for the 2d array 
-	
+	initialize 2d array elements with "" 
 	checkwinner
-
+	alternating X or O function
 
 	draw X
 	draw O 
-	alternating X or O function
 
 	stop functionality once winner
 
@@ -53,7 +51,7 @@ int countUnits(int val) {
 }
 
 // in wherever there was a click, the 2D array will filled with the value 100 
-void analyzeClick(sf::Vector2i clickPos, int sideLen, int (&arr)[3][3]) {
+void analyzeClick(sf::Vector2i clickPos, int sideLen, std::string (&arr)[3][3]) {
 	
 	int unit = sideLen / 14;
 
@@ -67,7 +65,7 @@ void analyzeClick(sf::Vector2i clickPos, int sideLen, int (&arr)[3][3]) {
 	int yGrid = countUnits(yUnits); 
 
 	if (xGrid != -1 && yGrid != -1) {
-		arr[xGrid][yGrid] = 100;
+		arr[xGrid][yGrid] = "filled"; // use the alternating x or o function to fill this 
 	}
 } 
 
@@ -78,7 +76,7 @@ void checkWinner(int(&arr)[3][3]) {
 
 int main() {
 	int sideLen = 700; 
-	int arr[3][3]; 
+	std::string arr[3][3]; 
 
 
 	sf::RenderWindow window(sf::VideoMode(sideLen, sideLen), "Tic-tac-toe");
