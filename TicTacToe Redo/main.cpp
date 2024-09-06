@@ -1,7 +1,4 @@
 /*
-	checkwinner
-	alternating X or O function
-
 	draw X
 	draw O 
 
@@ -50,7 +47,7 @@ int countUnits(int val) {
 }
 
 // in wherever there was a click, the 2D array will filled with the value 100 
-void analyzeClick(sf::Vector2i clickPos, int sideLen, std::string (&arr)[3][3]) {
+void analyzeClick(sf::Vector2i clickPos, int sideLen, std::string (&arr)[3][3], std::string letter) {
 	
 	int unit = sideLen / 14;
 
@@ -64,7 +61,7 @@ void analyzeClick(sf::Vector2i clickPos, int sideLen, std::string (&arr)[3][3]) 
 	int yGrid = countUnits(yUnits); 
 
 	if (xGrid != -1 && yGrid != -1) {
-		arr[xGrid][yGrid] = "filled"; // use the alternating x or o function to fill this 
+		arr[xGrid][yGrid] = letter; // use the alternating x or o function to fill this 
 	}
 } 
 
@@ -78,21 +75,31 @@ void checkWinner(std::string(&arr)[3][3]) {
 	for (const std::string player : players) {
 		for (int i = 0; i < 3; i++) {
 			if (checkLine(arr[i][0], arr[i][1], arr[i][2], player) ||
-				checkLine(arr[0][i], arr[1][i], arr[2][i], player)) {
+			checkLine(arr[0][i], arr[1][i], arr[2][i], player)) {
+				std::cout << player << " wins" << std::endl;
+				return;
 			}
-			std::cout << player << " wins" << std::endl;
-			return;
 		}
 
 		if (checkLine(arr[0][0], arr[1][1], arr[2][2], player) ||
-			checkLine(arr[0][2], arr[1][1], arr[2][0], player)) {
+		checkLine(arr[0][2], arr[1][1], arr[2][0], player)) {
 			std::cout << player << " wins" << std::endl; 
 			return; 
 		}
 	}
+}
 
+void drawLetter() {
+	// iterates through the grid, and any time x or o is found it draws it
+	drawX(); 
+	drawO(); 
+}
 
-	// more efficient checkwinner func
+void drawX() { // takes for input the x and y (and window), then draws X
+
+}
+
+void drawO() {
 }
 
 
@@ -111,6 +118,8 @@ int main() {
 	window.setFramerateLimit(60);
 	// sf::Window::setSize(int size)
 
+	std::string letter = "O";
+
 	while (window.isOpen()) {
 
 		window.clear(); 
@@ -125,7 +134,26 @@ int main() {
 
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 				sf::Vector2i clickPos = sf::Mouse::getPosition(window);
-				analyzeClick(clickPos, sideLen, arr); 
+
+				if (countUnits(clickPos.x / (sideLen / 14)) != -1 && countUnits(clickPos.y / (sideLen / 14)) != -1) {
+					if (letter == "X") {
+						letter = "O";
+					}
+					else if (letter == "O") {
+						letter = "X";
+					}
+				}
+
+				analyzeClick(clickPos, sideLen, arr, letter);
+				checkWinner(arr);
+
+				std::cout << "\n\n\n\n";
+				for (int i = 0; i < 3; i++) {
+					for (int j = 0; j < 3; j++) {
+						std::cout << arr[j][i] << " ";
+					}
+					std::cout << std::endl; 
+				}
 			}
 
 		}
